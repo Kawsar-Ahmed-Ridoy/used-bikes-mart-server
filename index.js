@@ -121,6 +121,14 @@ async function run() {
       const result = await reportedItemCollection.insertOne(report);
       res.send(result);
     });
+
+    app.get("/reportedItem", verifyJWT, async (req, res) => {
+      const query = {};
+      const reported = await reportedItemCollection.find(query).toArray();
+      res.send(reported);
+    });
+
+
   } finally {
   }
 }
