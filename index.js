@@ -122,11 +122,27 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/reportedItem", verifyJWT, async (req, res) => {
+    app.get("/reportedItem",  async (req, res) => {
       const query = {};
       const reported = await reportedItemCollection.find(query).toArray();
       res.send(reported);
     });
+
+    app.get("/users", verifyJWT, async (req, res) => {
+      const decoded = req.decoded;
+      if (decoded.email !== req.query.email) {
+        res.status(403).send({ message: "unauthorized access" });
+      }
+      let query = {};
+      if (req.query.email) {
+        query = {
+          email: req.query.email
+        };
+      }
+      const user = await usersCollection.find(query).toArray();
+      res.send(user);
+    });
+
 
 
   } finally {
